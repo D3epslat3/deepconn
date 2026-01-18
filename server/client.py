@@ -13,7 +13,11 @@ def handle_client(client_socket):
 
     while True:
         message = client_socket.recv(1024).decode().strip()
+
+        if message == 'exit':
+            break
+
         evQueue.put(('message', user, message))
     
-    evQueue.put(('disconnect', user))
+    evQueue.put(('disconnection', user))
     client_socket.close()

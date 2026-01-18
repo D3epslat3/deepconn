@@ -15,22 +15,21 @@ from client import handle_client
 
 PORT = 8080
 
-def tcp_server():
-    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_socket.bind(('0.0.0.0', PORT))
+def tcp_server(server_socket):
+    server_socket.bind(('::', PORT, 0, 0))
 
     print('Server started on %s:%d' % (socket.gethostbyname(socket.gethostname()), PORT))
 
-    server_socket.listen(5)
+    server_socket.listen()
 
     while True:
         client_socket, client_address = server_socket.accept()
+        print('Connection from %s:%d' % (client_address[0], client_address[1]))
         threading.Thread(target=handle_client, args=(client_socket,), daemon=True).start()
 
-    server_socket.close()
-
 if __name__ == '__main__':
-    threading.Thread(target=tcp_server, daemon=True).start()
+    server_socket = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)
+    threading.Thread(target=tcp_server, args=(server_socket,), daemon=True).start()
     threading.Thread(target=handle_messages, daemon=True).start()
 
     while True:
@@ -42,3 +41,6 @@ if __name__ == '__main__':
                 print(users.users)
         except KeyboardInterrupt:
             break
+    
+    print('Closing server...')
+    server_socket.close()
