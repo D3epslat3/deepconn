@@ -220,6 +220,7 @@ local function main()
             -- --- DADOS DA REDE ---
             if s == client then
                 local line, err = client:receive()
+                print(line)
                 if not err then
                     -- Parsing Otimizado
                     local cmd, payload = line:match("^(%u+)%s+(.+)")
