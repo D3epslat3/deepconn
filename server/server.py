@@ -42,5 +42,5 @@ if __name__ == '__main__':
         except KeyboardInterrupt:
             break
     
-    print('Closing server...')
+    print('losing server...')
     server_socket.close()
